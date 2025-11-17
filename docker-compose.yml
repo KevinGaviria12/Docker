@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: adso-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: adso
+      POSTGRES_USER: adso
+      POSTGRES_PASSWORD: adso
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: adso-app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/adso
+      SPRING_DATASOURCE_USERNAME: adso
+      SPRING_DATASOURCE_PASSWORD: adso
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      JWT_SECRET: U3VwZXJEdXBlclNlY3JldEtleUZvckpXVEV4YW1wbGUxMjM0NTY=
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  db-data:
