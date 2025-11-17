@@ -31,13 +31,13 @@ public class SecurityConfig {
                 // Definimos las reglas de autorización
                 .authorizeHttpRequests(authz -> authz
                         // Endpoints públicos (registro y login)
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         
                         // Endpoints de productos:
                         // Solo ADMIN puede crear productos (POST)
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/products").hasAuthority(com.example.adso.model.Role.ADMIN.name())
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/products").hasAuthority(com.example.adso.model.Role.ADMIN.name())
                         // USER y ADMIN pueden ver productos (GET)
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/products").hasAnyAuthority(com.example.adso.model.Role.ADMIN.name(), com.example.adso.model.Role.USER.name())
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/products").hasAnyAuthority(com.example.adso.model.Role.ADMIN.name(), com.example.adso.model.Role.USER.name())
 
                         // Todas las demás peticiones deben estar autenticadas
                         .anyRequest().authenticated()
